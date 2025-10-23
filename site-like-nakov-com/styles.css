@@ -1,0 +1,303 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a2e;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    background: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1920&h=600&fit=crop') center/cover no-repeat;
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(2px);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.logo-text {
+    color: #ffffff;
+}
+
+.logo-domain {
+    color: #ff6b35;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tagline {
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: #ffffff;
+    font-weight: 300;
+    margin-bottom: 30px;
+}
+
+.profile-image {
+    margin: 30px auto;
+}
+
+.profile-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid #ffffff;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.social-like {
+    margin: 20px 0;
+}
+
+.like-btn {
+    background: #4267B2;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: #365899;
+    transform: scale(1.05);
+}
+
+.like-btn i {
+    margin-right: 8px;
+}
+
+.bio {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px;
+    font-size: 18px;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.bio strong {
+    font-weight: 600;
+}
+
+.link-highlight {
+    color: #ff6b35;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link-highlight:hover {
+    color: #f7931e;
+    text-decoration: underline;
+}
+
+/* Projects Section */
+.projects {
+    padding: 60px 20px;
+    background: #0f0f1e;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    gap: 40px;
+}
+
+.project-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+}
+
+.card-gradient {
+    padding: 3px;
+    border-radius: 15px;
+}
+
+.purple-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.blue-gradient {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+.card-content {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 30px;
+    height: 100%;
+}
+
+.card-image {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.card-image:hover img {
+    transform: scale(1.05);
+}
+
+.card-text h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.card-text h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #bb86fc;
+}
+
+.cyan-text {
+    color: #00d9ff !important;
+}
+
+.card-info {
+    margin: 20px 0;
+}
+
+.card-info h4 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.card-info p {
+    font-size: 16px;
+    color: #cccccc;
+    margin: 5px 0;
+}
+
+.card-footer {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.event-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.event-date {
+    color: #cccccc;
+    font-size: 14px;
+}
+
+.event-date i {
+    margin-right: 5px;
+}
+
+.event-link {
+    color: #bb86fc;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 36px;
+    }
+
+    .tagline {
+        font-size: 14px;
+        letter-spacing: 2px;
+    }
+
+    .profile-image img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .bio {
+        font-size: 16px;
+        text-align: left;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .card-text h2 {
+        font-size: 22px;
+    }
+
+    .card-text h3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        min-height: 500px;
+    }
+
+    .logo {
+        font-size: 28px;
+    }
+
+    .card-content {
+        padding: 20px;
+    }
+
+    .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
