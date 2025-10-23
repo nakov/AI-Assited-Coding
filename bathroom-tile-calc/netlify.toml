@@ -1,0 +1,10 @@
+[build]
+  publish = "./"
+  command = ""
+
+[context.production.environment]
+  NODE_ENV = "production"
+
+# This project is a static site, so no build command is required.
+# When deploying the repository root to Netlify, set the site's "Publish directory" to the
+# subfolder `bathroom-tile-calc` (or deploy from this folder directly).

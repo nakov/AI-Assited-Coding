@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bathroom Tile Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏠 Bathroom Tile Calculator</h1>
+            <p class="subtitle">Calculate tiles needed with precision and visualize your bathroom layout</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <h2>Enter Bathroom Dimensions</h2>
+                <p class="info-text">All measurements in millimeters (mm)</p>
+                
+                <form id="tile-form">
+                    <div class="form-group">
+                        <h3>Floor Dimensions</h3>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="floor-width">Width (mm)</label>
+                                <input type="number" id="floor-width" value="3000" min="100" required>
+                            </div>
+                            <div class="input-field">
+                                <label for="floor-length">Length (mm)</label>
+                                <input type="number" id="floor-length" value="2500" min="100" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Floor Tile Size</h3>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="floor-tile-width">Width (mm)</label>
+                                <input type="number" id="floor-tile-width" value="300" min="10" required>
+                            </div>
+                            <div class="input-field">
+                                <label for="floor-tile-length">Length (mm)</label>
+                                <input type="number" id="floor-tile-length" value="300" min="10" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Wall Details</h3>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="wall-height">Wall Height (mm)</label>
+                                <input type="number" id="wall-height" value="2400" min="100" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Wall Tile Size</h3>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="wall-tile-width">Width (mm)</label>
+                                <input type="number" id="wall-tile-width" value="200" min="10" required>
+                            </div>
+                            <div class="input-field">
+                                <label for="wall-tile-height">Height (mm)</label>
+                                <input type="number" id="wall-tile-height" value="250" min="10" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3>Door Dimensions</h3>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="door-width">Width (mm)</label>
+                                <input type="number" id="door-width" value="800" min="0" required>
+                            </div>
+                            <div class="input-field">
+                                <label for="door-height">Height (mm)</label>
+                                <input type="number" id="door-height" value="2000" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">Calculate Tiles</button>
+                </form>
+            </section>
+
+            <section class="results-section" id="results-section" style="display: none;">
+                <h2>Calculation Results</h2>
+                
+                <div class="results-grid">
+                    <div class="result-card floor-card">
+                        <div class="result-icon">🟫</div>
+                        <h3>Floor Tiles</h3>
+                        <div class="result-value" id="floor-tiles">0</div>
+                        <p class="result-label">tiles needed</p>
+                        <div class="result-details">
+                            <span>Area: <strong id="floor-area">0</strong> m²</span>
+                            <span>With 10% waste allowance</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card wall-card">
+                        <div class="result-icon">🟦</div>
+                        <h3>Wall Tiles</h3>
+                        <div class="result-value" id="wall-tiles">0</div>
+                        <p class="result-label">tiles needed</p>
+                        <div class="result-details">
+                            <span>Area: <strong id="wall-area">0</strong> m²</span>
+                            <span>With 10% waste allowance</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="visualization-section" id="visualization-section" style="display: none;">
+                <h2>Bathroom Layout Visualization</h2>
+                
+                <div class="view-tabs">
+                    <button class="tab-btn active" data-view="floor">Floor Plan</button>
+                    <button class="tab-btn" data-view="walls">Wall Elevations</button>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="visualization-canvas"></canvas>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #8B4513;"></span>
+                        <span>Floor Tiles</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #4A90E2;"></span>
+                        <span>Wall Tiles</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #8B4513; opacity: 0.3;"></span>
+                        <span>Door</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Made with ❤️ for accurate tile calculations</p>
+        </footer>
+    </div>
+
+    <script src="calculator.js"></script>
+    <script src="visualizer.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BMI Calculator</title>
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#fff; --muted:#6b7280;
+      --green:#22c55e; --yellow:#f59e0b; --red:#ef4444; --blue:#3b82f6;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{margin:0;background:linear-gradient(180deg,#eaf2ff 0%,var(--bg) 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px}
+    .card{background:var(--card);border-radius:12px;padding:20px;max-width:920px;width:100%;box-shadow:0 6px 30px rgba(20,30,60,0.08);display:grid;grid-template-columns:1fr 360px;gap:20px}
+    h1{font-size:18px;margin:0 0 8px}
+    p.lead{margin:0 0 16px;color:var(--muted);font-size:13px}
+    .form-row{display:flex;gap:10px;margin-bottom:10px}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    input[type="number"], select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:white;font-size:14px}
+    .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
+    .radio-row{display:flex;gap:10px;align-items:center}
+    .unit-toggle{display:flex;gap:8px}
+    .unit-toggle button{padding:8px 10px;border-radius:8px;border:1px solid #e6e9ef;background:white;cursor:pointer}
+    .unit-toggle .active{background:var(--blue);color:white;border-color:var(--blue)}
+    .calc-actions{display:flex;gap:10px;margin-top:8px}
+    button.primary{background:var(--blue);color:white;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid #e6e9ef;padding:10px;border-radius:8px;cursor:pointer}
+    .result{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
+    .bmi-value{font-size:34px;font-weight:700;margin:6px 0}
+    .bmi-category{font-weight:600;padding:6px 10px;border-radius:999px;color:white}
+    .muted-small{font-size:13px;color:var(--muted)}
+    /* gauge */
+    .gauge {width:280px;height:160px;display:block}
+    svg {overflow:visible}
+    .needle {transform-origin:140px 140px;transition:transform 800ms cubic-bezier(.2,.9,.3,1)}
+    .bar {rx:10;filter:drop-shadow(0 3px 6px rgba(30,40,60,0.08))}
+    .legend{display:flex;gap:8px;align-items:center;margin-top:10px}
+    .leg{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+    .color-box{width:14px;height:10px;border-radius:3px}
+    @media (max-width:880px){.card{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="card" role="application" aria-label="BMI Calculator">
+    <section>
+      <h1>BMI Calculator</h1>
+      <p class="lead">Enter age, gender, height and weight. Toggle units and press Calculate (or live update).</p>
+
+      <div>
+        <div class="form-row">
+          <div style="flex:1">
+            <label for="age">Age</label>
+            <input id="age" type="number" min="1" max="120" value="30" />
+          </div>
+          <div style="width:160px">
+            <label>Gender</label>
+            <div class="radio-row">
+              <label><input type="radio" name="gender" value="male" checked/> Male</label>
+              <label><input type="radio" name="gender" value="female" /> Female</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div>
+            <label for="height">Height</label>
+            <input id="height" type="number" min="30" max="250" value="170" />
+          </div>
+          <div>
+            <label for="weight">Weight</label>
+            <input id="weight" type="number" min="10" max="400" value="70" />
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="unit-toggle" role="tablist" aria-label="Units">
+            <button id="metricBtn" class="active" role="tab">Metric (cm / kg)</button>
+            <button id="imperialBtn" role="tab">Imperial (ft/in / lb)</button>
+          </div>
+          <div class="calc-actions">
+            <button id="calcBtn" class="primary">Calculate</button>
+            <button id="resetBtn" class="ghost">Reset</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+          Tip: For imperial, enter height as total inches (or use feet/inches fields available when toggled).
+        </div>
+      </div>
+    </section>
+
+    <aside class="result" aria-live="polite">
+      <svg class="gauge" viewBox="0 0 280 160" role="img" aria-label="BMI gauge">
+        <!-- colored segments -->
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+        </defs>
+
+        <!-- segments: map BMI ranges into arcs visually -->
+        <path d="M20 140 A120 120 0 0 1 80 36" stroke="#93c5fd" stroke-width="18" fill="none" stroke-linecap="round"/>
+        <path d="M80 36 A120 120 0 0 1 140 20" stroke="#34d399" stroke-width="18" fill="none" stroke-linecap="round"/>
+        <path d="M140 20 A120 120 0 0 1 200 36" stroke="#f59e0b" stroke-width="18" fill="none" stroke-linecap="round"/>
+        <path d="M200 36 A120 120 0 0 1 260 140" stroke="#ef4444" stroke-width="18" fill="none" stroke-linecap="round"/>
+
+        <!-- tick marks -->
+        <g stroke="#fff" stroke-opacity=".6" stroke-width="2">
+          <!-- simple ticks -->
+          <line x1="20"  y1="140" x2="28"  y2="136"/>
+          <line x1="80"  y1="36"  x2="88"  y2="32"/>
+          <line x1="140" y1="20"  x2="148" y2="16"/>
+          <line x1="200" y1="36"  x2="208" y2="32"/>
+          <line x1="260" y1="140" x2="252" y2="136"/>
+        </g>
+
+        <!-- needle pivot -->
+        <circle cx="140" cy="140" r="6" fill="#222"/>
+
+        <!-- needle -->
+        <g class="needle" id="needle" transform="rotate(-90 140 140)">
+          <rect x="138" y="28" width="4" height="110" rx="2" fill="#111"/>
+        </g>
+
+        <!-- center overlay -->
+        <circle cx="140" cy="140" r="56" fill="#fff" stroke="#eef2ff" stroke-width="2"/>
+        <text x="140" y="120" font-size="14" fill="#6b7280" text-anchor="middle">BMI</text>
+        <text id="bmiText" x="140" y="145" font-size="18" font-weight="700" fill="#111" text-anchor="middle">--</text>
+      </svg>
+
+      <div style="text-align:center;margin-top:8px">
+        <div id="bmiValue" class="bmi-value">--</div>
+        <div id="bmiCat" class="bmi-category" style="background:#ddd;color:#111">--</div>
+        <div class="muted-small" style="margin-top:8px">Healthy range: 18.5 – 24.9</div>
+
+        <div class="legend">
+          <div class="leg"><span class="color-box" style="background:#93c5fd"></span><span>Underweight</span></div>
+          <div class="leg"><span class="color-box" style="background:#34d399"></span><span>Healthy</span></div>
+          <div class="leg"><span class="color-box" style="background:#f59e0b"></span><span>Overweight</span></div>
+          <div class="leg"><span class="color-box" style="background:#ef4444"></span><span>Obesity</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Basic BMI calculator with unit toggle + visualization (needle rotates between -90..90 degrees)
+    const ageEl = document.getElementById('age');
+    const heightEl = document.getElementById('height');
+    const weightEl = document.getElementById('weight');
+    const metricBtn = document.getElementById('metricBtn');
+    const imperialBtn = document.getElementById('imperialBtn');
+    const calcBtn = document.getElementById('calcBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const bmiValueEl = document.getElementById('bmiValue');
+    const bmiCatEl = document.getElementById('bmiCat');
+    const bmiText = document.getElementById('bmiText');
+    const needle = document.getElementById('needle');
+
+    let units = 'metric'; // or 'imperial'
+
+    function setActive(button){
+      metricBtn.classList.remove('active');
+      imperialBtn.classList.remove('active');
+      button.classList.add('active');
+    }
+
+    metricBtn.addEventListener('click', ()=> { units='metric'; setActive(metricBtn); heightEl.placeholder='cm'; heightEl.value = heightEl.value || 170; weightEl.placeholder='kg'; weightEl.value = weightEl.value || 70; });
+    imperialBtn.addEventListener('click', ()=> { units='imperial'; setActive(imperialBtn); heightEl.placeholder='inches'; heightEl.value = Math.round((heightEl.value || 170) / 2.54); weightEl.placeholder='lb'; weightEl.value = Math.round((weightEl.value || 70) * 2.205); });
+
+    function calcBMI(){
+      const age = Number(ageEl.value);
+      let height = Number(heightEl.value);
+      let weight = Number(weightEl.value);
+      if (!height || !weight || !age) {
+        showFeedback('--','Please enter valid age, height and weight','default');
+        return;
+      }
+
+      // convert to metric if needed
+      if (units === 'imperial') {
+        // height in inches -> meters
+        height = height * 2.54; // cm
+        weight = weight / 2.205; // kg
+      }
+      const heightM = height / 100;
+      const bmi = weight / (heightM * heightM);
+      const rounded = Math.round(bmi * 10) / 10;
+
+      const category = bmiCategory(rounded);
+      showFeedback(rounded, category.text, category.color);
+      moveNeedle(rounded);
+    }
+
+    function bmiCategory(bmi){
+      if (bmi < 18.5) return {text:'Underweight', color:'#60a5fa'};
+      if (bmi < 25) return {text:'Healthy', color:'#34d399'};
+      if (bmi < 30) return {text:'Overweight', color:'#f59e0b'};
+      return {text:'Obesity', color:'#ef4444'};
+    }
+
+    function showFeedback(value, catText, color){
+      bmiValueEl.textContent = isFinite(value) ? value : '--';
+      bmiText.textContent = isFinite(value) ? value : '--';
+      bmiCatEl.textContent = catText;
+      bmiCatEl.style.background = color;
+    }
+
+    // Map BMI to needle rotation: clamp between 10..40 -> angle -90..90
+    function moveNeedle(bmi){
+      const min = 10, max = 40;
+      const clamped = Math.max(min, Math.min(max, bmi));
+      const angle = ((clamped - min) / (max - min)) * 180 - 90;
+      needle.style.transform = `rotate(${angle}deg)`;
+    }
+
+    calcBtn.addEventListener('click', calcBMI);
+    // quick live update while typing (debounced)
+    let typingTimer;
+    [ageEl, heightEl, weightEl].forEach(el => el.addEventListener('input', ()=>{
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(()=> calcBMI(), 700);
+    }));
+
+    resetBtn.addEventListener('click', ()=>{
+      ageEl.value = 30; heightEl.value = units==='metric'?170:67; weightEl.value = units==='metric'?70:154;
+      showFeedback('--','--','#ddd');
+      needle.style.transform = 'rotate(-90deg)';
+      bmiValueEl.textContent='--';
+    });
+
+    // initialize
+    (function init(){
+      // default
+      showFeedback('--','--','#ddd');
+      needle.style.transform = 'rotate(-90deg)';
+    })();
+  </script>
+</body>
+</html>
